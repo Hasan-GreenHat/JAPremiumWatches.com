@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>JA Premium Watches</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0b0b;       /* Deep luxe black */
+    --panel:#121212;    /* Card background */
+    --gold:#d4af37;     /* Accent gold */
+    --gold-soft:#c5a231;
+    --text:#f5f5f5;
+    --muted:#a9a9a9;
+    --ok:#1f9d55;
+    --danger:#d9534f;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background: radial-gradient(1200px 600px at 20% -10%, rgba(212,175,55,.08), transparent 60%),
+                        radial-gradient(1000px 500px at 120% 10%, rgba(212,175,55,.06), transparent 60%),
+                        linear-gradient(135deg, #0a0a0a, #0e0e0e 40%, #0a0a0a);
+    color:var(--text); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none}
+  .container{max-width:1200px; margin:0 auto; padding:0 20px}
+
+  /* Top bar */
+  .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 0}
+  .brand{display:flex; align-items:center; gap:10px}
+  .brand-mark{width:38px; height:38px; border-radius:10px; background:linear-gradient(145deg, #1a1a1a, #111); border:1px solid #333; display:grid; place-items:center; color:var(--gold); font-weight:700; font-family: "Playfair Display", serif}
+  .brand h1{font-family:"Playfair Display", serif; font-size:22px; letter-spacing:1.6px; margin:0; color:var(--gold)}
+  .nav .cta{display:flex; gap:10px; align-items:center}
+  .btn{padding:10px 16px; border-radius:999px; border:1px solid #2a2a2a; background:#161616; color:var(--text); font-weight:600; cursor:pointer}
+  .btn:hover{border-color:#3a3a3a}
+  .btn-gold{background:linear-gradient(180deg, var(--gold), var(--gold-soft)); border:none; color:#1a1300}
+  .btn-ghost{background:transparent; border:1px solid #2a2a2a; color:var(--text)}
+  .btn-danger{background:#2a1717; border-color:#3a1c1c; color:#ffb4b0}
+  .user-pill{font-size:14px; color:var(--muted)}
+
+  /* Hero */
+  .hero{position:relative; overflow:hidden; border-bottom:1px solid #191919}
+  .hero-wrap{display:grid; grid-template-columns: 1.1fr .9fr; gap:24px; align-items:center; min-height:68vh}
+  .headline{font-family:"Playfair Display", serif; font-size: clamp(28px, 5vw, 54px); line-height:1.06; margin:0 0 10px}
+  .sub{color:var(--muted); max-width:48ch; margin:0 0 24px}
+  .hero-cta{display:flex; gap:12px; flex-wrap:wrap}
+
+  /* Slider */
+  .stage{position:relative; aspect-ratio: 4 / 3; background:radial-gradient(800px 400px at 50% 20%, rgba(212,175,55,.09), transparent 60%);
+         border:1px solid #1b1b1b; border-radius:18px; overflow:hidden}
+  .slide{position:absolute; inset:0; display:grid; place-items:center; opacity:0; transform:translateX(8%); transition:opacity .9s ease, transform 1.2s cubic-bezier(.16,.84,.44,1)}
+  .slide.active{opacity:1; transform:translateX(0)}
+  .slide img{max-width:82%; max-height:82%; filter: drop-shadow(0 30px 40px rgba(0,0,0,.5)); transform:perspective(800px) rotateY(10deg) scale(1.02); animation: breathe 6s ease-in-out infinite}
+  @keyframes breathe{0%,100%{transform:perspective(800px) rotateY(10deg) scale(1.02)}50%{transform:perspective(800px) rotateY(8deg) scale(1.04)}}
+  .dots{position:absolute; bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:10px}
+  .dot{width:8px; height:8px; border-radius:50%; background:#444; border:1px solid #666; cursor:pointer}
+  .dot.active{background:var(--gold); border-color:#000}
+
+  /* Section heading */
+  .section{padding:46px 0}
+  .section h2{font-family:"Playfair Display", serif; font-size:28px; margin:0 0 8px}
+  .section p.lead{color:var(--muted); margin:0 0 18px}
+
+  /* Product grid */
+  .grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:18px}
+  .card{background:linear-gradient(180deg, #151515, #111); border:1px solid #1b1b1b; border-radius:16px; overflow:hidden; position:relative}
+  .card-media{position:relative; padding:18px; display:grid; place-items:center}
+  .card-media img{width:100%; height:auto; border-radius:12px; transition:transform .5s ease}
+  .card:hover .card-media img{transform:translateY(-4px) scale(1.02)}
+  .ribbon{position:absolute; top:14px; left:14px; background:var(--gold); color:#000; font-weight:800; font-size:12px; padding:4px 8px; border-radius:999px}
+  .card-body{padding:0 18px 18px}
+  .title{font-weight:700; font-size:18px; margin:6px 0 4px}
+  .price{color:var(--gold); font-weight:800; letter-spacing:.3px}
+  .actions{display:flex; gap:10px; margin-top:12px}
+  .btn-sm{padding:10px 12px; border-radius:12px; border:1px solid #2a2a2a; background:#181818; color:var(--text); font-weight:700; cursor:pointer}
+  .btn-sm:hover{border-color:#3a3a3a}
+  .btn-buy{background:linear-gradient(180deg, var(--gold), var(--gold-soft)); color:#1a1300; border:none}
+
+  /* Cart drawer */
+  .cart-fab{position:fixed; right:18px; bottom:18px; background:var(--panel); border:1px solid #2a2a2a; width:56px; height:56px; border-radius:50%; display:grid; place-items:center; box-shadow:0 10px 30px rgba(0,0,0,.35); cursor:pointer; z-index:40}
+  .cart-fab:hover{transform:translateY(-2px)}
+  .badge{position:absolute; top:-6px; right:-6px; background:var(--gold); color:#000; font-weight:800; min-width:22px; height:22px; border-radius:11px; display:grid; place-items:center; font-size:12px; padding:0 6px; border:1px solid #000}
+  .drawer{position:fixed; top:0; right:-420px; width:360px; max-width:90vw; height:100vh; background:#0f0f0f; border-left:1px solid #1b1b1b; box-shadow:-20px 0 40px rgba(0,0,0,.4); transition:right .45s ease; z-index:50; display:flex; flex-direction:column}
+  .drawer.open{right:0}
+  .drawer header{padding:16px 16px; border-bottom:1px solid #1b1b1b; display:flex; justify-content:space-between; align-items:center}
+  .drawer header h3{margin:0; font-family:"Playfair Display", serif}
+  .drawer .items{flex:1; overflow:auto; padding:12px}
+  .cart-item{display:grid; grid-template-columns:56px 1fr auto; gap:10px; align-items:center; padding:10px; border:1px solid #1b1b1b; border-radius:12px; margin-bottom:10px; background:#111}
+  .cart-item img{width:56px; height:56px; object-fit:cover; border-radius:10px}
+  .qty{display:flex; align-items:center; gap:8px}
+  .qty button{width:26px; height:26px; border-radius:6px; border:1px solid #2a2a2a; background:#181818; color:#fff; font-weight:800; cursor:pointer}
+  .drawer footer{padding:16px; border-top:1px solid #1b1b1b}
+  .tot{display:flex; justify-content:space-between; margin-bottom:10px}
+  .checkout{width:100%; padding:12px; border:none; border-radius:12px; background:linear-gradient(180deg, var(--gold), var(--gold-soft)); color:#1a1300; font-weight:900; cursor:pointer}
+  .muted{color:var(--muted); font-size:13px; margin-top:6px}
+
+  /* Profile & Orders */
+  .sheet{background:#111; border:1px solid #222; border-radius:16px; padding:18px}
+  .sheet h3{margin:0 0 10px; font-family:"Playfair Display", serif}
+  .sheet label{display:block; font-size:14px; margin-top:10px; color:#cfcfcf}
+  .sheet input, .sheet textarea{width:100%; padding:10px 12px; border-radius:10px; border:1px solid #2a2a2a; background:#181818; color:#fff; margin-top:6px}
+  .warn{color:#ffb4b0; font-size:13px; margin-top:6px}
+  .ok{color:#8ef0b6; font-size:13px; margin-top:6px}
+
+  /* Footer */
+  footer{border-top:1px solid #1b1b1b; color:#bfbfbf; padding:26px 0; font-size:14px; text-align:center}
+
+  @media (max-width: 860px){
+    .hero-wrap{grid-template-columns:1fr; padding:10px 0 24px}
+    .stage{aspect-ratio: 1 / 1}
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <div class="brand">
+        <div class="brand-mark">JA</div>
+        <h1>JA Premium Watches</h1>
+      </div>
+      <div class="cta">
+        <span class="user-pill" id="userPill">Guest</span>
+        <button class="btn" id="loginBtn">Login / Register</button>
+        <button class="btn btn-ghost" id="logoutBtn" style="display:none">Logout</button>
+      </div>
+    </nav>
+  </div>
+
+  <section class="hero">
+    <div class="container hero-wrap">
+      <div>
+        <h2 class="headline">Timeless precision, modern elegance.</h2>
+        <p class="sub">Meticulously crafted timepieces with Japanese quartz accuracy. Cash on Delivery only • Deliverable only within <strong>Hyderabad, Telangana</strong>.</p>
+        <div class="hero-cta">
+          <a class="btn btn-gold" href="#shop">Explore Collection</a>
+          <a class="btn" href="#profile">My Profile</a>
+        </div>
+      </div>
+      <div class="stage" id="stage">
+        <div class="slide active"><img src="BlueWatch(1).jpeg" alt="Blue Watch" /></div>
+        <div class="slide"><img src="BlackWatch(1).jpeg" alt="Black Watch" /></div>
+        <div class="dots" id="dots"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="shop" class="section container" style="display:none">
+    <h2>Featured Models</h2>
+    <p class="lead">Select your style. <strong>COD only</strong>. Hyderabad delivery only.</p>
+    <div class="grid">
+      <article class="card" data-id="blue">
+        <div class="card-media">
+          <span class="ribbon">₹499</span>
+          <img src="BlueWatch(1).jpeg" alt="JA Blue Watch" />
+        </div>
+        <div class="card-body">
+          <div class="title">JA Azure Sport</div>
+          <div class="price">₹499</div>
+          <div class="actions">
+            <button class="btn-sm" onclick="addToCart('blue')">Add to Cart</button>
+            <button class="btn-sm btn-buy" id="buy-blue" onclick="buyNow('blue')">Buy Now</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-id="black">
+        <div class="card-media">
+          <span class="ribbon">₹499</span>
+          <img src="BlackWatch(1).jpeg" alt="JA Black Watch" />
+        </div>
+        <div class="card-body">
+          <div class="title">JA Noir Classic</div>
+          <div class="price">₹499</div>
+          <div class="actions">
+            <button class="btn-sm" onclick="addToCart('black')">Add to Cart</button>
+            <button class="btn-sm btn-buy" id="buy-black" onclick="buyNow('black')">Buy Now</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Floating cart FAB -->
+  <button class="cart-fab" id="cartFab" title="Open cart" onclick="toggleDrawer(true)" style="display:none">
+    🛒
+    <span class="badge" id="cartCount">0</span>
+  </button>
+
+  <!-- Cart Drawer -->
+  <aside class="drawer" id="drawer">
+    <header>
+      <h3>Your Cart</h3>
+      <button class="btn" onclick="toggleDrawer(false)">Close</button>
+    </header>
+    <div class="items" id="cartItems"></div>
+    <footer>
+      <div class="tot"><span>Subtotal</span><strong id="subtotal">₹0</strong></div>
+      <button class="checkout" id="checkoutBtn">Checkout on WhatsApp</button>
+      <div class="muted">COD only. Delivery: Hyderabad, Telangana.</div>
+      <div class="warn" id="deliveryWarn" style="display:none">Sorry, we only deliver within Hyderabad, Telangana.</div>
+    </footer>
+  </aside>
+
+  <!-- Profile & Orders -->
+  <section id="profile" class="section container" style="display:none">
+    <h2>My Profile</h2>
+    <div class="sheet">
+      <h3>Contact & Address</h3>
+      <label>Full Name</label>
+      <input id="p_name" placeholder="Your full name" />
+      <label>Phone</label>
+      <input id="p_phone" placeholder="10-digit mobile" />
+      <label>Address (Hyderabad, Telangana only)</label>
+      <textarea id="p_addr" rows="3" placeholder="House no, Street, Area, Hyderabad, Telangana - PIN"></textarea>
+      <div id="addrMsg" class="warn" style="display:none">Address must be in Hyderabad, Telangana.</div>
+      <div id="addrOk" class="ok" style="display:none">Deliverable ✔</div>
+      <div style="margin-top:12px; display:flex; gap:8px">
+        <button class="btn btn-gold" id="saveProfileBtn">Save Profile</button>
+        <button class="btn btn-danger" id="deleteBtn">Delete Account</button>
+      </div>
+    </div>
+
+    <div class="sheet" style="margin-top:16px">
+      <h3>My Orders</h3>
+      <div id="myOrders"></div>
+    </div>
+  </section>
+
+  <footer>
+    © <span id="yr"></span> JA Premium Watches • Designed for elegance
+  </footer>
+
+  <!-- Auth Modal -->
+  <div class="modal" id="authModal" style="position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; place-items:center; z-index:60">
+    <div class="sheet" style="width:min(420px, 92vw)">
+      <h3 id="authTitle">Login</h3>
+      <label>Email</label>
+      <input id="email" type="email" placeholder="name@example.com" />
+      <label>Password</label>
+      <input id="password" type="password" placeholder="Minimum 6 characters" />
+      <div class="row" style="display:flex; gap:8px; margin-top:14px">
+        <button class="btn btn-gold" id="authAction">Login</button>
+        <button class="btn" id="toggleMode">Need an account? Register</button>
+      </div>
+      <div class="muted" style="margin-top:8px">By continuing you agree to our terms. COD only. No returns; you may cancel before shipment.</div>
+    </div>
+  </div>
+
+<!-- Firebase SDKs (Compat for simplicity) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+<script>
+  // ====== CONFIG ======
+  const WHATSAPP_NUMBER = '918019671808'; // <- CHANGE to your full number, e.g., '919876543210'
+  const FIREBASE_CONFIG = {
+       apiKey: "AIzaSyBg1w6_Z_-ViNyAbxU5f-N07jl72cG20Hc",
+    authDomain: "japremiumwatches.firebaseapp.com",
+    databaseURL: "https://japremiumwatches-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "japremiumwatches",
+    storageBucket: "japremiumwatches.firebasestorage.app",
+    messagingSenderId: "416885805893",
+    appId: "1:416885805893:web:9238d0eeda5dd9366ce42c"
+  };
+
+  const CATALOG = {
+    blue: { id:'blue', name:'JA Azure Sport', price:499, img:'BlueWatch(1).jpeg' },
+    black:{ id:'black', name:'JA Noir Classic', price:499, img:'BlackWatch(1).jpeg' }
+  };
+  const CART_KEY = 'ja_cart_v3';
+
+  // ====== INIT FIREBASE ======
+  firebase.initializeApp(FIREBASE_CONFIG);
+  const auth = firebase.auth();
+  const rtdb = firebase.database();
+
+  // ====== HERO SLIDER ======
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dotsWrap = document.getElementById('dots');
+  let idx = 0; let timer;
+  function renderDots(){
+    dotsWrap.innerHTML = '';
+    slides.forEach((_, i)=>{
+      const d = document.createElement('div'); d.className = 'dot' + (i===idx?' active':'');
+      d.addEventListener('click', ()=>go(i));
+      dotsWrap.appendChild(d);
+    });
+  }
+  function go(i){ slides[idx].classList.remove('active'); idx = (i+slides.length)%slides.length; slides[idx].classList.add('active'); renderDots(); restart(); }
+  function next(){ go(idx+1); }
+  function start(){ timer = setInterval(next, 4000); }
+  function restart(){ clearInterval(timer); start(); }
+  renderDots(); start();
+
+  // ====== AUTH MODAL ======
+  const authModal = document.getElementById('authModal');
+  const loginBtn = document.getElementById('loginBtn');
+  const authAction = document.getElementById('authAction');
+  const toggleMode = document.getElementById('toggleMode');
+  const authTitle = document.getElementById('authTitle');
+  const userPill = document.getElementById('userPill');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  let mode = 'login';
+  loginBtn.onclick = ()=> authModal.style.display = 'grid';
+  toggleMode.onclick = ()=>{
+    mode = mode==='login' ? 'register' : 'login';
+    authTitle.textContent = mode==='login' ? 'Login' : 'Register';
+    authAction.textContent = mode==='login' ? 'Login' : 'Create Account';
+    toggleMode.textContent = mode==='login' ? 'Need an account? Register' : 'Have an account? Login';
+  };
+authAction.onclick = async () => {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  try {
+    if (mode === 'login') {
+      const { user } = await auth.signInWithEmailAndPassword(email, password);
+      // ensure user node exists
+      const userRef = rtdb.ref('users/' + user.uid);
+      userRef.once('value', snapshot => {
+        if (!snapshot.exists()) {
+          userRef.set({ email: user.email, createdAt: Date.now() });
+        }
+      });
+    } else {
+      const { user } = await auth.createUserWithEmailAndPassword(email, password);
+      await rtdb.ref('users/' + user.uid).set({ email, createdAt: Date.now() });
+    }
+    authModal.style.display = 'none';
+  } catch (e) {
+    alert(e.message);
+  }
+};
+
+authModal.addEventListener('click', (e) => {
+  if (e.target === authModal) authModal.style.display = 'none';
+});
+
+
+  logoutBtn.onclick = ()=> auth.signOut();
+
+  auth.onAuthStateChanged(async (user)=>{
+    if(user){
+      userPill.textContent = user.email;
+      loginBtn.style.display='none';
+      logoutBtn.style.display='inline-block';
+      document.getElementById('shop').style.display='block';
+      document.getElementById('cartFab').style.display='grid';
+      document.getElementById('profile').style.display='block';
+      await loadProfile();
+      subscribeMyOrders();
+      enforceDeliverability();
+    }else{
+      userPill.textContent = 'Guest';
+      loginBtn.style.display='inline-block';
+      logoutBtn.style.display='none';
+      document.getElementById('shop').style.display='none';
+      document.getElementById('cartFab').style.display='none';
+      document.getElementById('profile').style.display='none';
+    }
+  });;
+
+  // ====== PROFILE ======
+  const nameEl = document.getElementById('p_name');
+  const phoneEl = document.getElementById('p_phone');
+  const addrEl = document.getElementById('p_addr');
+  const addrMsg = document.getElementById('addrMsg');
+  const addrOk = document.getElementById('addrOk');
+  const saveBtn = document.getElementById('saveProfileBtn');
+  const deleteBtn = document.getElementById('deleteBtn');
+
+  function isDeliverable(addr){
+    if(!addr) return false;
+    const a = addr.toLowerCase();
+    return a.includes('hyderabad') && a.includes('telangana');
+  }
+
+  async function loadProfile(){
+    const u = auth.currentUser; if(!u) return;
+    const snap = await rtdb.ref('users/'+u.uid).get();
+    const data = snap.val() || {};
+    nameEl.value = data.name || '';
+    phoneEl.value = data.phone || '';
+    addrEl.value = data.address || '';
+    updateAddrState();
+  }
+
+  function updateAddrState(){
+    const ok = isDeliverable(addrEl.value);
+    addrMsg.style.display = ok? 'none':'block';
+    addrOk.style.display = ok? 'block':'none';
+    // Hide/show checkout + buy buttons
+    document.getElementById('checkoutBtn').style.display = ok? 'block':'none';
+    document.getElementById('deliveryWarn').style.display = ok? 'none':'block';
+    const buyBlue = document.getElementById('buy-blue');
+    const buyBlack = document.getElementById('buy-black');
+    if(buyBlue) buyBlue.style.display = ok? 'inline-block':'none';
+    if(buyBlack) buyBlack.style.display = ok? 'inline-block':'none';
+  }
+  addrEl.addEventListener('input', updateAddrState);
+
+  saveBtn.onclick = async ()=>{
+    const u = auth.currentUser; if(!u) return;
+    const name = nameEl.value.trim();
+    const phone = phoneEl.value.trim();
+    const address = addrEl.value.trim();
+    if(!name||!phone||!address){ alert('Please fill name, phone and address'); return; }
+    await rtdb.ref('users/'+u.uid).update({ name, phone, address, updatedAt: Date.now() });
+    alert('Profile saved');
+    enforceDeliverability();
+  };
+
+  deleteBtn.onclick = async ()=>{
+    if(!confirm('Delete your account? This cannot be undone.')) return;
+    const u = auth.currentUser; if(!u) return;
+    try{
+      await rtdb.ref('users/'+u.uid).remove();
+      await u.delete();
+      alert('Account deleted');
+    }catch(e){ alert(e.message + '\n(If error: re-login then delete)'); }
+  };
+
+  function enforceDeliverability(){ updateAddrState(); }
+
+  // ====== CART ======
+  
+  // --- CART HELPER ---
+
+
+
+  const drawer = document.getElementById('drawer');
+  const countEl = document.getElementById('cartCount');
+  const itemsEl = document.getElementById('cartItems');
+  const subtotalEl = document.getElementById('subtotal');
+
+  function loadCart(){ try{ return JSON.parse(localStorage.getItem(CART_KEY)) || {}; }catch{ return {}; } }
+  function saveCart(cart){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+  function getCount(cart){ return Object.values(cart).reduce((a,b)=>a+b.qty,0); }
+  function getSubtotal(cart){ return Object.values(cart).reduce((a,b)=>a + (b.qty*b.price),0); }
+
+  function renderCart(){
+    const cart = loadCart();
+    const items = Object.values(cart);
+    countEl.textContent = getCount(cart);
+    subtotalEl.textContent = '₹' + getSubtotal(cart);
+    itemsEl.innerHTML = items.length? '' : '<p class="muted">Your cart is empty.</p>';
+    items.forEach(it=>{
+      const row = document.createElement('div');
+      row.className = 'cart-item';
+      row.innerHTML = `
+        <img src="${it.img}" alt="${it.name}">
+        <div>
+          <div style="font-weight:800">${it.name}</div>
+          <div class="muted">₹${it.price}</div>
+          <div class="qty" style="margin-top:6px">
+            <button onclick="dec('${it.id}')">–</button>
+            <span>${it.qty}</span>
+            <button onclick="inc('${it.id}')">+</button>
+            <button style="margin-left:8px" onclick="removeItem('${it.id}')">Remove</button>
+          </div>
+        </div>
+        <div style="font-weight:800">₹${it.qty*it.price}</div>`;
+      itemsEl.appendChild(row);
+    });
+  }
+
+  function addToCart(id){
+    const u = auth.currentUser; if(!u){ authModal.style.display='grid'; return; }
+    const cart = loadCart();
+    const p = CATALOG[id];
+    if(!cart[id]) cart[id] = { ...p, qty:0 };
+    cart[id].qty++;
+    saveCart(cart); renderCart(); pulseCart(); toggleDrawer(true);
+  }
+  function inc(id){ const c=loadCart(); if(c[id]){ c[id].qty++; saveCart(c); renderCart(); } }
+  function dec(id){ const c=loadCart(); if(c[id]){ c[id].qty=Math.max(0,c[id].qty-1); if(c[id].qty===0) delete c[id]; saveCart(c); renderCart(); } }
+  function removeItem(id){ const c=loadCart(); delete c[id]; saveCart(c); renderCart(); }
+
+  function pulseCart(){
+    const fab = document.getElementById('cartFab');
+    fab.style.transform = 'scale(1.06)';
+    setTimeout(()=>{ fab.style.transform='scale(1)'; }, 180);
+  }
+
+  function toggleDrawer(open){ drawer.classList.toggle('open', !!open); if(open) renderCart(); }
+  document.getElementById('cartFab').addEventListener('click', ()=>toggleDrawer(true));
+
+  // Buy single product immediately
+  async function buyNow(id){
+    const u = auth.currentUser; if(!u){ authModal.style.display='grid'; return; }
+    const profileSnap = await rtdb.ref('users/'+u.uid).get();
+    const prof = profileSnap.val()||{};
+    if(!isDeliverable(prof.address||'')){ alert('We currently deliver only within Hyderabad, Telangana. Please update your address.'); return; }
+    const p = CATALOG[id];
+    const items = [{ productId:p.id, name:p.name, price:p.price, qty:1 }];
+    createOrder(u, prof, items).then(openWAForOrder).catch(e=>alert(e.message));
+  }
+
+  // ====== ORDERS (RTDB) ======
+  async function createOrder(user, profile, items){
+    const subtotal = items.reduce((a,b)=> a + b.price*b.qty, 0);
+    const order = {
+      userId: user.uid,
+      email: user.email,
+      name: profile.name||'',
+      phone: profile.phone||'',
+      address: profile.address||'',
+      items,
+      subtotal,
+      payment: 'COD',
+      status: 'pending',
+      createdAt: Date.now()
+    };
+    const ref = rtdb.ref('orders').push();
+    await ref.set(order);
+    return { id: ref.key, ...order };
+  }
+
+  function openWAForOrder(ord){
+    const lines = ord.items.map(i=>`• ${i.name} x${i.qty} — ₹${i.price} (₹${i.qty*i.price})`).join('%0A');
+    const msg = `Hello JA,%0A%0AI want to place an order:%0A${lines}%0A%0ASubtotal: ₹${ord.subtotal}%0AName: ${encodeURIComponent(ord.name)}%0APhone: ${encodeURIComponent(ord.phone)}%0AAddress: ${encodeURIComponent(ord.address)}%0AOrder ID: ${ord.id}%0APayment: COD`;
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+    window.open(url, '_blank');
+  }
+const checkoutBtn = document.getElementById('checkoutBtn');
+
+checkoutBtn.addEventListener('click', async () => {
+  const user = auth.currentUser;
+  if (!user) { alert("Please log in to place an order."); return; }
+
+  // Load the cart from CART_KEY
+  const cart = loadCart();
+  const items = Object.values(cart);
+  if (!items.length) { alert("Your cart is empty."); return; }
+
+  // Get user's saved profile/address
+  const profileSnap = await rtdb.ref("users/" + user.uid).get();
+  const profile = profileSnap.val() || {};
+
+  if (!isDeliverable(profile.address || "")) {
+    alert("We currently deliver only within Hyderabad, Telangana. Please update your address.");
+    return;
+  }
+
+  // Create order then open WhatsApp
+  createOrder(user, profile, items)
+    .then(openWAForOrder)
+    .catch((e) => alert(e.message));
+});
+
+  // ====== USER ORDERS LIST ======
+  let myOrdersUnsub = null;
+  function subscribeMyOrders(){
+    const u = auth.currentUser; if(!u) return;
+    rtdb.ref('orders').orderByChild('userId').equalTo(u.uid).on('value', snap=>{
+      const wrap = document.getElementById('myOrders');
+      wrap.innerHTML = '';
+      const val = snap.val()||{};
+      const ids = Object.keys(val).reverse();
+      if(!ids.length){ wrap.innerHTML = '<p class="muted">No orders yet.</p>'; return; }
+      ids.forEach(id=>{
+        const o = val[id];
+        const items = (o.items||[]).map(i=>`${i.name} x${i.qty}`).join(', ');
+        const div = document.createElement('div');
+        div.className='order';
+        div.style.cssText='border:1px solid #222; border-radius:12px; padding:12px; background:#101010; margin-bottom:10px';
+        div.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+            <strong>Order ${id.substring(0,6).toUpperCase()}</strong>
+            <span class="chip" style="padding:4px 8px;border-radius:999px;background:#1b1b1b;border:1px solid #2a2a2a;font-size:12px">${new Date(o.createdAt).toLocaleString()}</span>
+          </div>
+          <div class="muted" style="margin-top:6px">${items}</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+            <span class="chip">Subtotal: ₹${o.subtotal}</span>
+            <span class="chip">Status: ${o.status}</span>
+            ${o.status==='pending' ? `<button class="btn btn-danger" onclick="cancelOrder('${id}')">Cancel</button>`:''}
+          </div>`;
+        wrap.appendChild(div);
+      });
+    });
+  }
+
+  function cancelOrder(orderId){
+    const u = auth.currentUser; if(!u) return;
+    if(!confirm('Cancel this order?')) return;
+    rtdb.ref('orders/'+orderId+'/status').set('cancelled');
+  }
+
+  // ====== UTIL ======
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  renderCart();
+
+</script>
+</body>
+</html>
